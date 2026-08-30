@@ -1,0 +1,10 @@
+{
+  "name": "@grokbotit/mcp",
+  "version": "0.1.0",
+  "description": "Local MCP server for the grokbotit directory. Read-only. Agents cannot vote.",
+  "type": "module",
+  "bin": {
+    "grokbotit-mcp": "./index.mjs"
+  },
+  "license": "MIT"
+}

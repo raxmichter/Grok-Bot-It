@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="grokbotit">
+  <defs>
+    <radialGradient id="gbOrb" cx="32%" cy="26%" r="86%">
+      <stop offset="0" stop-color="#ffb184"></stop>
+      <stop offset="0.46" stop-color="#ff5c26"></stop>
+      <stop offset="1" stop-color="#c22a00"></stop>
+    </radialGradient>
+  </defs>
+  <circle cx="32" cy="32" r="31" fill="url(#gbOrb)"></circle>
+  <g fill="none" stroke="#150803" stroke-width="6.6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M17.5 34 L23.5 26 L29.5 34" transform="rotate(-7 23.5 30)"></path>
+    <path d="M34.5 34 L40.5 26 L46.5 34" transform="rotate(7 40.5 30)"></path>
+  </g>
+</svg>

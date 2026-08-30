@@ -1,36 +1,47 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# grokbotit
 
-## Getting Started
+A Product Hunt-style community for Grok Bots. People connect X, post the bots they have built, upvote them, add them, and argue in the replies. Free, no ads, no company behind it.
 
-First, run the development server:
+**Live:** [grokbotit.com](https://grokbotit.com)
+
+The original design prototype lives in `prototype/` and is the visual source of truth. The Next.js app serves that UI, persists it through a SQLite/Turso backend, and exposes a public API plus `@grokbotit/mcp`.
+
+## Stack
+
+- Next.js 16 (App Router) on Vercel
+- libSQL / Turso (local file in development)
+- X OAuth 2.0 when `TWITTER_CLIENT_ID` / `TWITTER_CLIENT_SECRET` are set; otherwise a local Connect X session (set `ALLOW_DEV_AUTH=true`)
+- Ranking: Hot is `upvotes / (ageHours + 2)`. One upvote per account. Adds are a separate install count.
+
+## Develop
 
 ```bash
+source ~/.nvm/nvm.sh
+cp .env.example .env.local   # then set AUTH_SECRET
+npm install
+npm test
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Environment
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Variable | Purpose |
+| --- | --- |
+| `AUTH_SECRET` | Signed session cookie |
+| `APP_URL` | Canonical origin (`https://grokbotit.com` in production) |
+| `TURSO_DATABASE_URL` | `file:./data/grokbotit.db` locally, `libsql://…` in production |
+| `TURSO_AUTH_TOKEN` | Turso token (production) |
+| `TWITTER_CLIENT_ID` / `TWITTER_CLIENT_SECRET` | X OAuth 2.0 |
+| `ALLOW_DEV_AUTH` | If `true`, Connect X signs in the seeded builder without X |
 
-## Learn More
+## MCP
 
-To learn more about Next.js, take a look at the following resources:
+```
+npx -y @grokbotit/mcp
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Tools: `search_bots`, `get_bot`, `list_categories`, `top_bots`, `install_bot`. Read access is unauthenticated. Voting is not exposed.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Contact: hello@grokbotit.com

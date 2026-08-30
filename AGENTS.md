@@ -1,9 +1,9 @@
-<!-- BEGIN:nextjs-agent-rules -->
+# grokbotit
 
-# This is NOT the Next.js you know
+Product Hunt-style directory for Grok Bots. The visual source of truth is `prototype/Grokbotit.dc.html`. Production serves that UI through Next.js with a libSQL backend.
 
-This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
-
-This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
-
-<!-- END:nextjs-agent-rules -->
+- TypeScript strict. No `any`.
+- Ranking: Hot is `upvotes / (ageHours + 2)`. One upvote per account. Category counts are derived.
+- Do not expose voting on the MCP server.
+- Third-party X / GrokBot marks only on Connect X, Add to Grok Bot, Share on, and the footer credit.
+- Contact: hello@grokbotit.com
