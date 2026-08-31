@@ -14,6 +14,7 @@ function uid(prefix: string, handle: string): string {
 }
 
 export async function seedIfEmpty(db: DB): Promise<void> {
+  if (process.env.SEED_DEMO !== "true") return;
   const [{ n }] = await db.select({ n: count() }).from(users);
   if (n > 0) return;
 

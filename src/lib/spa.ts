@@ -58,6 +58,10 @@ export function renderSpa(opts: {
 }): string {
   let html = prototypeHtml();
   html = html.replace("./support.js", "/support.js");
+  html = html.replace(
+    '<span onClick="{{ simulateDecline }}" style="font-size:12px; color:#7d848b; cursor:pointer;" style-hover="color:#7d848b;">simulate failure</span>',
+    "",
+  );
   html = html.replaceAll('src="assets/', 'src="/assets/');
   html = html.replaceAll("src='assets/", "src='/assets/");
 
@@ -193,8 +197,9 @@ const GROUPS = [`,
     `allBots() { return this.props.dayOne ? this.state.userBots : this.state.userBots.concat(BOTS); }`,
     `allBots() {
     if (this.props.dayOne) return this.state.userBots;
-    const remote = (typeof window !== 'undefined' && window.__GBI_BOOT && window.__GBI_BOOT.bots) || null;
-    return this.state.userBots.concat(remote && remote.length ? remote : BOTS);
+    const boot = typeof window !== 'undefined' && window.__GBI_BOOT;
+    const remote = boot && Array.isArray(boot.bots) ? boot.bots : BOTS;
+    return this.state.userBots.concat(remote);
   }`,
   );
 
@@ -203,7 +208,8 @@ const GROUPS = [`,
     return (this.state.newComments[id] || []).concat(COMMENTS[id] || []);
   }`,
     `commentsFor(id) {
-    const remote = (typeof window !== 'undefined' && window.__GBI_BOOT && window.__GBI_BOOT.comments && window.__GBI_BOOT.comments[id]) || COMMENTS[id] || [];
+    const boot = typeof window !== 'undefined' && window.__GBI_BOOT;
+    const remote = boot && boot.comments ? (boot.comments[id] || []) : (COMMENTS[id] || []);
     return (this.state.newComments[id] || []).concat(remote);
   }`,
   );
@@ -294,7 +300,7 @@ const GROUPS = [`,
   }
   makersLive() {
     const boot = (typeof window !== 'undefined' && window.__GBI_BOOT) || {};
-    return boot.makers && boot.makers.length ? boot.makers : MAKERS;
+    return Array.isArray(boot.makers) ? boot.makers : MAKERS;
   }
 
   renderVals() {`,
@@ -317,7 +323,7 @@ const GROUPS = [`,
 
   html = html.replace(
     "notifications: NOTIFS.map(n => Object.assign({}, n, { pfpStyle:pfp(n.hue) })),",
-    "notifications: ((typeof window!=='undefined'&&window.__GBI_BOOT&&window.__GBI_BOOT.notifications)||NOTIFS).map(n => Object.assign({}, n, { pfpStyle:pfp(n.hue) })),",
+    "notifications: (typeof window!=='undefined'&&window.__GBI_BOOT&&Array.isArray(window.__GBI_BOOT.notifications)?window.__GBI_BOOT.notifications:NOTIFS).map(n => Object.assign({}, n, { pfpStyle:pfp(n.hue) })),",
   );
 
   html = html.replace(

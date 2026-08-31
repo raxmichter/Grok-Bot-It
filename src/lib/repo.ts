@@ -212,32 +212,39 @@ export async function commentsFor(botId: string, session: Session | null) {
   return roots.sort((a, b) => (b?.createdAt ?? 0) - (a?.createdAt ?? 0));
 }
 
+function emptySessionState() {
+  return {
+    signedIn: false,
+    me: null as PublicUser | null,
+    votes: {} as Record<string, boolean>,
+    adds: {} as Record<string, boolean>,
+    follows: {} as Record<string, boolean>,
+    likes: {} as Record<string, boolean>,
+    settings: {
+      replies: true,
+      follows: true,
+      milestones: true,
+      digest: false,
+      publicProfile: true,
+    },
+    notifications: [] as Array<{
+      initial: string;
+      hue: string;
+      text: string;
+      age: string;
+    }>,
+  };
+}
+
 export async function sessionState(session: Session | null) {
   const db = await ensureDb();
   if (!session) {
-    return {
-      signedIn: false,
-      me: null as PublicUser | null,
-      votes: {} as Record<string, boolean>,
-      adds: {} as Record<string, boolean>,
-      follows: {} as Record<string, boolean>,
-      likes: {} as Record<string, boolean>,
-      settings: {
-        replies: true,
-        follows: true,
-        milestones: true,
-        digest: false,
-        publicProfile: true,
-      },
-      notifications: [] as Array<{
-        initial: string;
-        hue: string;
-        text: string;
-        age: string;
-      }>,
-    };
+    return emptySessionState();
   }
   const [user] = await db.select().from(users).where(eq(users.id, session.userId));
+  if (!user) {
+    return emptySessionState();
+  }
   const voteRows = await db.select().from(votes).where(eq(votes.userId, session.userId));
   const addRows = await db.select().from(adds).where(eq(adds.userId, session.userId));
   const followRows = await db.select().from(follows).where(eq(follows.followerId, session.userId));
