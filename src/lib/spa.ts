@@ -104,6 +104,7 @@ export function renderSpa(opts: {
 <meta property="og:image" content="${escapeHtml(ogImage)}">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <link rel="icon" href="/assets/grokbotit-mark.svg" type="image/svg+xml">
 `,
   );
@@ -117,6 +118,11 @@ const GROUPS = [`,
   html = html.replace(
     "route:'home', param:null, signedIn:true",
     "route:(typeof window!=='undefined'&&gbiParse(location.pathname,location.search).route)||'home', param:(typeof window!=='undefined'&&gbiParse(location.pathname,location.search).param), signedIn:(typeof window!=='undefined'&&window.__GBI_BOOT)?!!window.__GBI_BOOT.signedIn:true",
+  );
+
+  html = html.replace(
+    "meName:ME.name, meBio:ME.bio, vw:1280",
+    "meName:ME.name, meBio:ME.bio, vw:(typeof window!=='undefined'&&window.innerWidth)||1280",
   );
 
   html = html.replace(
